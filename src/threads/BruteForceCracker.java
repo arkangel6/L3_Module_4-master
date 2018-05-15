@@ -9,31 +9,43 @@ package threads;
 
 import java.util.Random;
 
-public class BruteForceCracker {
+public class BruteForceCracker{
 	static long code = (long)(new Random().nextDouble() * 1_000_000_000);
 	
 	static long startTime;
 	static long endTime;
 	static float elapsedTime;
 	
+	
 	public static void main(String[] args) {
 		System.out.println("Starting Brute Force Checker");
 		
 		
-		Thread t1 = new Thread(()-> {int ctr = 0; while(!checkCode(ctr++));});
-		Thread t2 = new Thread(()-> {int c = 1000000000; while(!checkCode(c--));});
+		Thread t1 = new Thread(()-> {int ctr = 0; while(!checkCode(ctr+=4));});
+		Thread t3 = new Thread(()-> {int ctr = 1; while(!checkCode(ctr+=4));});
+		Thread t2 = new Thread(()-> {int c = 2; while(!checkCode(c+=4));});
+		Thread t4 = new Thread(()-> {int c = 3; while(!checkCode(c+=4));});
 
 		startTime = System.currentTimeMillis();
 		
 		//while(!checkCode(ctr++));
 		t1.start();
 		t2.start();
+		t3.start();
+		t4.start();
+		boolean notfound = true;
+		while(notfound) {
+		if(!t1.isAlive() || !t2.isAlive() || !t3.isAlive() || !t4.isAlive()) {
+			notfound = false;
+			}
+		}
 		
 		
 		endTime = System.currentTimeMillis();
 		elapsedTime = (float)(endTime - startTime);
 		elapsedTime /= 1000.f;
 		System.out.println("Total time taken: " + elapsedTime + " seconds");
+		
 	}
 	
 	public static boolean checkCode(long p){
@@ -44,4 +56,6 @@ public class BruteForceCracker {
 			return false;
 		}
 	}
+
+	
 }
